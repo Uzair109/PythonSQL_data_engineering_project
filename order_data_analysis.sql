@@ -28,13 +28,13 @@ Limit 10;
 
 -- find top 5 highest selling products in each region
 With cte As(
-Select region, sub_category As product, Sum(sale_price) As revenue,
-Row_Number() over (partition by region order by Sum(sale_price)) As no_of_products 
+Select region, sub_category As products, Sum(sale_price) As revenue ,
+Row_Number() over (partition by region order by Sum(sale_price) desc) As row_no
 From df_orders
-Group by region, product
+Group by region, products
 )
 Select * From cte                                               
-Where no_of_products <= 5;
+Where row_no <= 5;
 
 -- find month over month growth comparison for 2022 and 2023 sales
 With cte As(
